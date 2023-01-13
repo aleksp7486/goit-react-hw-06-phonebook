@@ -1,7 +1,5 @@
 import { Item, Text, Icon, Number, Btn } from './ContactList.styled';
 import { BsFillPersonFill, BsFillPersonXFill } from 'react-icons/bs';
-import { useEffect } from 'react';
-import { LS_CONTACTS } from 'redux/constants';
 import { useSelector, useDispatch } from 'react-redux';
 import { getContacts, getFilter } from 'redux/selector';
 import { deleteContact } from 'redux/contactsSlice';
@@ -11,11 +9,6 @@ const ContactList = () => {
   const contacts = useSelector(getContacts);
   const filter = useSelector(getFilter);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const contactsJSON = JSON.stringify(contacts);
-    localStorage.setItem(LS_CONTACTS, contactsJSON);
-  }, [contacts]);
 
   const filteredContacts = useMemo(
     () =>

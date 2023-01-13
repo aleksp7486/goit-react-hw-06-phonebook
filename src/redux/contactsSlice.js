@@ -1,22 +1,35 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { LS_CONTACTS } from 'redux/constants';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
-const contactsInitialState =
-  JSON.parse(localStorage.getItem(LS_CONTACTS)) ?? [];
+const initialContactsState = {
+  contactsList: [],
+};
 
 const contactsSlice = createSlice({
   name: 'contacts',
-  initialState: contactsInitialState,
+  initialState: initialContactsState,
   reducers: {
     addContact(state, action) {
-      state.push(action.payload);
+      state.contactsList.push(action.payload);
     },
     deleteContact(state, action) {
-      const index = state.findIndex(contact => contact.id === action.payload);
-      state.splice(index, 1);
+      const index = state.contactsList.findIndex(
+        contact => contact.id === action.payload
+      );
+      state.contactsList.splice(index, 1);
     },
   },
 });
 
+const persistConfig = {
+  key: 'contactsList',
+  storage,
+};
+
+export const persistedReducer = persistReducer(
+  persistConfig,
+  contactsSlice.reducer
+);
+
 export const { addContact, deleteContact } = contactsSlice.actions;
-export const contactsReducer = contactsSlice.reducer;
